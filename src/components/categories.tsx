@@ -46,7 +46,7 @@ const Categories = ({data}: CategoriesProps) => {
         hover:opacity-75
         transition
 
-        `)}>Newest</button>
+        `,!categoryId ?"bg-primary/25": "bg-primary/10")}>Newest</button>
         {data.map((item)=>(
 
         <button key= {item.id}  onClick={()=>OnClick(item.id)} className={cn(`
