@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -15,6 +16,28 @@ datasource db {
 }
 
 model Category {
-  id   String @id @default(uuid())
-  name String
+  id         String      @id @default(uuid())
+  name       String
+  companions Companion[]
+}
+
+model Companion {
+  id           String @id @default(uuid())
+  userId       String
+  username     String
+  src          String
+  name         String @db.Text
+  description  String
+  instructions String @db.Text
+  seed         String @db.Text
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  // @@fulltext([name])
+
+  @@index([categoryId])
+  @@index([name])
 }
