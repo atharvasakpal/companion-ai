@@ -1,9 +1,11 @@
+import SearchInput from '@/components/search-input'
+import { UserButton } from '@clerk/nextjs'
 import React from 'react'
 
 const RootPage = () => {
   return (
-    <div>
-      Root Page(Protected)
+    <div className='h-full p-4 space-y-2'>
+      <SearchInput/>
     </div>
   )
 }

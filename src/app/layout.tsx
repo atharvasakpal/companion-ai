@@ -10,6 +10,7 @@ import {
   SignedOut,
   UserButton
 } from '@clerk/nextjs'
+import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,12 +34,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-     <ClerkProvider>
-    <html lang="en">
+     <ClerkProvider afterSignOutUrl='/sign-in'>
+      
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <ThemeProvider attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange>
         {children}
+      </ThemeProvider>
       </body>
     </html>
     </ClerkProvider>
