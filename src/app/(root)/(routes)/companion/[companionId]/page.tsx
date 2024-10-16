@@ -1,5 +1,6 @@
 import CompanionForm from '@/components/companion-form'
 import prismadb from '@/lib/prismadb'
+import { auth } from '@clerk/nextjs/server'
 import React from 'react'
 
 
@@ -10,6 +11,8 @@ interface CompanionIdProps{
     }
 }
 
+const {userId} = auth();
+
 const CompanionIdPage = async({params}: CompanionIdProps) => {
 
     //TODO : check subsciption
@@ -18,6 +21,11 @@ const CompanionIdPage = async({params}: CompanionIdProps) => {
             id: params.companionId
         }
     })
+
+    if(!userId)
+    {
+      return auth().redirectToSignIn()
+    }
 
     const categories = await prismadb.category.findMany()
 
