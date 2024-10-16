@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form'
 //shadcn imports
 import { Button } from "@/components/ui/button"
 
+
 import {
   Form,
   FormControl,
@@ -33,6 +34,15 @@ import ImageUpload from './image-upload'
 import { Input } from './ui/input'
 import { Textarea } from './ui/textarea'
 import { Wand2 } from 'lucide-react'
+
+
+import axios from 'axios';
+import { useToast } from '@/hooks/use-toast'
+import { useRouter } from 'next/navigation'
+
+
+
+
 
 interface CompanionFormProps{
     initialData  : Companion | null,
@@ -78,9 +88,41 @@ const CompanionForm = ({initialData, categories}: CompanionFormProps) => {
     })
 
     const isLoading = form.formState.isSubmitting
+    const { toast } = useToast()
+    const router = useRouter()
 
     const OnSubmit = async(values:z.infer<typeof formSchema>)=>{
         console.log(values)
+
+        try{
+            if(initialData)
+            {
+                //to update the already existing
+                await axios.patch(`/api/companion/${initialData.id}`,values)
+            }
+            else{
+                //create companion functionality
+                await axios.post(`/api/companion`,values)
+            }
+
+            toast({
+           
+            description: `Success`,
+            variant: 'default'
+            })
+            
+            router.refresh();
+            router.push('/')
+        }
+        catch(error)
+        {
+            console.log('An error occured', error)
+            toast({
+            title: "An Error Occured!",
+            description: `${error}`,
+            variant: 'destructive'
+            })
+        }
     }
 
   return (

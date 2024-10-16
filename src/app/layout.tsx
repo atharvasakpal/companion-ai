@@ -12,6 +12,10 @@ import {
 } from '@clerk/nextjs'
 import { ThemeProvider } from "@/components/theme-provider";
 
+//shadcn
+import { Toaster } from "@/components/ui/toaster"
+
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -45,6 +49,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange>
         {children}
+        <Toaster/>
       </ThemeProvider>
       </body>
     </html>
