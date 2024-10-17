@@ -3,7 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 import {Poppins} from 'next/font/google'
 import { cn } from '@/lib/utils'
-import { UserButton } from '@clerk/nextjs'
+import { useClerk, UserButton } from '@clerk/nextjs'
 import { Button } from './ui/button'
 import { ModeToggle } from './ui/ModeToggle'
 import MenuSidebar from './MenuSidebar'
@@ -13,7 +13,11 @@ const font  = Poppins({
         subsets: ['latin']
     })
 
+
+  
 const Navbar = () => {
+
+ 
 
   return (
     <div className='fixed w-full z-50 flex justify-between items-center py-2 px-4 bottom-b border-primary/10 bg-secondary h-16'>
@@ -29,7 +33,7 @@ const Navbar = () => {
 
         <div className='flex items-center gap-x-3'>
            
-            <Button variant='premium' size='sm'>Upgrade <Sparkles className='h-4 w-4 fill-white text-white ml-2'/></Button>
+            <Button variant='outline' size='sm'>Upgrade <Sparkles className='h-4 w-4 fill-white text-white ml-2'/></Button>
             <ModeToggle/>
             <UserButton/>
 
