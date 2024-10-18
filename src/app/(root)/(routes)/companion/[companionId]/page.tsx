@@ -11,9 +11,10 @@ interface CompanionIdProps{
     }
 }
 
-const {userId} = auth();
+
 
 const CompanionIdPage = async({params}: CompanionIdProps) => {
+  const {userId} = auth();
 
     //TODO : check subsciption
     const companion = await prismadb.companion.findUnique({
