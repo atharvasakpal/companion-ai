@@ -15,11 +15,8 @@ const ChatMessages = ({messages=[] , isLoading, companion}: ChatMessagesProps) =
 
     const scrollRef = useRef<ElementRef<'div'>>(null); //scroll to latest message
 
-    useEffect(()=>{
-        scrollRef?.current?.scrollIntoView({behavior: 'smooth'})
-    },[messages.length ])
+   
     
-
     const [fakeLoading, setFakeLoading] = useState(messages.length===0?true: false);
     useEffect(()=>{
         const timeout = setTimeout(()=>{
@@ -30,9 +27,15 @@ const ChatMessages = ({messages=[] , isLoading, companion}: ChatMessagesProps) =
             clearTimeout(timeout)
         }
     },[])
+
+    useEffect(()=>{
+        scrollRef?.current?.scrollIntoView({behavior: 'smooth'})
+    },[messages.length ])
+
+
   return (
 
-    <div className='flex-1'>
+    <div className='flex-1 overflow-y-auto pr-4'>
       <ChatMessage
       isLoading = {fakeLoading}
       src={companion.src}
@@ -45,14 +48,14 @@ const ChatMessages = ({messages=[] , isLoading, companion}: ChatMessagesProps) =
         key={message.content }
         role={message.role}
         content={message.content}
-        src={message.src}/>
+        src={companion.src}/>
       ))}
 
       {isLoading && (
         <ChatMessage
         role='system'
         src={companion.src}
-        isLoading/>
+        isLoading />
       )}
         <div ref={scrollRef}/>
         

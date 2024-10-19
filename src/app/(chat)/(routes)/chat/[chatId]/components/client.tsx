@@ -2,12 +2,13 @@
 
 import ChatHeader from '@/components/chat-header'
 import { Companion, Message } from '@prisma/client'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import React, { FormEvent, useState } from 'react'
 import { useCompletion } from 'ai/react'
 import ChatForm from '@/components/chat-form'
 import ChatMessages from '@/components/ChatMessages'
 import { ChatMessageProps } from '@/components/chat-message'
+import { ChatRequestOptions } from 'ai'
 
 interface ChatClientProps{
     companion: Companion & {messages: Message[],
@@ -21,28 +22,54 @@ const ChatClient = ({companion}: ChatClientProps) => {
 
 
     const router = useRouter()
-    const [messages, setMessages] = useState<ChatMessageProps[]>(companion.messages)
+    // const [messages, setMessages] = useState<ChatMessageProps[]>(companion.messages)
+
+    const [messages, setMessages] = useState<ChatMessageProps[]>(
+        companion.messages.map(message => ({
+            role: message.role as 'user' | 'system',
+            content: message.content
+        }))
+    )
 
     const {input,
             isLoading,
             handleInputChange,
             handleSubmit,
-            setInput} = useCompletion({
+            setInput,
+                } = useCompletion({
                 api:`/api/chat/${companion.id}`,
-                onFinish(prompt, completion){
+                onFinish(prompt, completion)
+                {
                     const systemMessage : ChatMessageProps= {
                         role: 'system',
                         content: completion
-                    }
-                    setMessages((current)=>[...current , systemMessage])
+                    };
+                    setMessages((current)=>[...current , systemMessage]);
                     setInput("");
-
-                    router.refresh()
+                    const pathname = usePathname();
+                    router.push(pathname);
+                    router.refresh();
+                    
+                   
                 }
-            })
+                 
+            });
 
 
-    const OnSubmit= (e: FormEvent<HTMLFormElement>)=>{
+
+    
+
+    // const OnSubmit= (e: FormEvent<HTMLFormElement>)=>{
+    //     const userMessage: ChatMessageProps = {
+    //         role: 'user',
+    //         content: input
+    //     }
+
+    //     setMessages((current)=>[...current, userMessage])
+    //     handleSubmit(e);
+    // }
+
+    const OnSubmit= (e: FormEvent<HTMLFormElement>,chatRequestOptions?: ChatRequestOptions)=>{
         const userMessage: ChatMessageProps = {
             role: 'user',
             content: input
